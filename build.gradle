@@ -1,0 +1,120 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+import java.security.MessageDigest
+
+plugins {
+	id 'net.fabricmc.fabric-loom' version "${loom_version}" apply false
+}
+
+// Addons are compiled against Kairo's own jar: put kairo-<version>.jar (from Mordsome/Kairo's releases) in libs/.
+def kairoJars = fileTree('libs') {
+	include 'kairo-*.jar'
+	exclude 'kairo-void-*.jar', '*-sources.jar'
+}
+
+subprojects {
+	apply plugin: 'net.fabricmc.fabric-loom'
+
+	def info = new JsonSlurper().parse(file('addon.json'))
+	group = 'dev.mordo.kairo.addons'
+	version = info.version
+
+	base {
+		archivesName = "kairo-addon-${info.id}"
+	}
+
+	dependencies {
+		// 26.x ships unobfuscated, so there is no mappings line.
+		minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+		implementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
+		compileOnly kairoJars
+	}
+
+	// fabric.mod.json is filled in from addon.json, so the two can never disagree.
+	processResources {
+		def values = [
+			id         : "kairo-addon-${info.id}".toString(),
+			version    : info.version,
+			name       : "Kairo Addon: ${info.name}".toString(),
+			description: info.summary,
+			api        : info.api,
+			editions   : JsonOutput.toJson(info.editions),
+			conflicts  : JsonOutput.toJson(info.conflicts ?: []),
+			kairo      : info.kairo,
+			minecraft  : info.minecraft
+		]
+		inputs.properties(values)
+		filesMatching('fabric.mod.json') {
+			expand(values)
+		}
+	}
+
+	java {
+		toolchain {
+			languageVersion = JavaLanguageVersion.of(25)
+		}
+	}
+
+	jar {
+		from(rootProject.file('LICENSE')) {
+			rename { 'LICENSE_kairo-addons' }
+		}
+	}
+}
+
+// ./gradlew catalogue: everything one release holds, in build/release/. Each addon's jar and icon, addons.json (the
+// list the launcher reads) and SHA256SUMS.txt (what every file is checked against). See SPEC.md.
+tasks.register('catalogue') {
+	group = 'build'
+	description = 'Builds every addon and writes the release folder: jars, icons, addons.json and SHA256SUMS.txt.'
+	dependsOn subprojects.collect { "${it.path}:build" }
+
+	def entries = subprojects.collect { sub ->
+		def info = new JsonSlurper().parse(sub.file('addon.json'))
+		[info: info, jar: sub.layout.buildDirectory.file("libs/kairo-addon-${info.id}-${info.version}.jar").get().asFile,
+		 icon: sub.file('icon.png')]
+	}
+	def outDir = layout.buildDirectory.dir('release').get().asFile
+
+	doLast {
+		def sha256 = { File f ->
+			MessageDigest.getInstance('SHA-256').digest(f.bytes).encodeHex().toString()
+		}
+		outDir.deleteDir()
+		outDir.mkdirs()
+		def listed = []
+		entries.sort { it.info.id }.each { e ->
+			def info = e.info
+			def jarOut = new File(outDir, e.jar.name)
+			jarOut.bytes = e.jar.bytes
+			def entry = [
+				id         : info.id,
+				name       : info.name,
+				summary    : info.summary,
+				description: info.description,
+				version    : info.version,
+				file       : jarOut.name,
+				sha256     : sha256(jarOut),
+				size       : jarOut.length(),
+				editions   : info.editions,
+				api        : info.api,
+				kairo      : info.kairo,
+				minecraft  : info.minecraft,
+				group      : info.group ?: 'other',
+				conflicts  : info.conflicts ?: [],
+				tags       : info.tags ?: []
+			]
+			if (e.icon.exists()) {
+				def iconOut = new File(outDir, "${info.id}.png")
+				iconOut.bytes = e.icon.bytes
+				entry.icon = iconOut.name
+			}
+			listed << entry
+		}
+		new File(outDir, 'addons.json').setText(JsonOutput.prettyPrint(JsonOutput.toJson([schema: 1, addons: listed])) + '\n', 'UTF-8')
+		def sums = outDir.listFiles().findAll { it.isFile() }.sort { it.name }.collect { "${sha256(it)}  ${it.name}" }
+		new File(outDir, 'SHA256SUMS.txt').setText(sums.join('\n') + '\n', 'UTF-8')
+		println "Release folder: ${outDir} (${listed.size()} addon(s))"
+	}
+}

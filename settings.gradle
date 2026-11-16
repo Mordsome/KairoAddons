@@ -1,0 +1,20 @@
+pluginManagement {
+	repositories {
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+		mavenCentral()
+		gradlePluginPortal()
+	}
+}
+
+rootProject.name = 'kairo-addons'
+
+// Every folder in addons/ with an addon.json is one addon.
+file('addons').eachDir { dir ->
+	if (new File(dir, 'addon.json').exists()) {
+		include dir.name
+		project(":${dir.name}").projectDir = dir
+	}
+}

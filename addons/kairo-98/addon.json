@@ -1,0 +1,14 @@
+{
+  "id": "kairo-98",
+  "name": "Kairo 98",
+  "version": "1.0.0",
+  "summary": "Kairo as a late-90s desktop: grey bevelled windows, a taskbar with a Start menu, and Minecraft's menus to match.",
+  "description": "Turns all of Kairo into a late-90s desktop. Menus are grey bevelled windows with blue title bars and black text, the main menu sits on a teal desktop, and Right Shift opens a taskbar with a Start menu instead of the ring. Minecraft's own menus follow: inventories and chests become grey windows with sunken slots, the hotbar is a raised bar, the experience bar fills with blue blocks, and hearts, hunger and the other HUD icons are drawn in the 16 colours of the time. Several colour schemes (switched instantly), two styles for HUD boxes, optional choppy retro animations for hitting and mining, and a start-up screen of its own, all in a Kairo 98 tab in Visuals. The window buttons work. Doesn't go together with Themes, Plastic Menus or Command Bar.",
+  "editions": ["kairo", "void"],
+  "api": 1,
+  "kairo": ">=0.4.0",
+  "minecraft": "~26.3",
+  "group": "themes",
+  "conflicts": ["themes", "plastic-menus", "command-bar"],
+  "tags": ["themes", "retro", "menus", "hud", "look"]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "themes",
+  "name": "Themes",
+  "version": "1.0.0",
+  "summary": "Four themes for all of Kairo: Glass, Minimal, Retro and Neon, on every menu, the ring and the HUD.",
+  "description": "Restyles Kairo and Kairo Void from top to bottom: the main menu, the pause menu, the ring, every Kairo menu and control, and the boxes behind HUD mods and keys. Glass is bright frosted glass; Minimal is quiet dark panels with a line in your colour; Retro is square pixel frames like Minecraft's tooltips and slots; Neon is dark with glowing edges. Pick one from pictures in Visuals (Theme); each has its own options.",
+  "editions": ["kairo", "void"],
+  "api": 1,
+  "kairo": ">=0.4.0",
+  "minecraft": "~26.3",
+  "group": "themes",
+  "tags": ["themes", "menus", "hud", "look"]
+}

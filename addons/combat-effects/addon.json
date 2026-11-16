@@ -1,0 +1,13 @@
+{
+  "id": "combat-effects",
+  "name": "Combat Effects",
+  "version": "1.0.0",
+  "summary": "Hit particles, kill effects, damage numbers, the edge flash and sound packs for Kairo.",
+  "description": "Brings plain Kairo's combat visuals back: particles on what you hit, kill effects (lightning, fireworks, a vortex, shatter and more) with their sound, floating damage numbers, the edge flash on hits, and the hit, crit and kill sound packs. Your old choices come back as they were. Kairo Void has all of this built in.",
+  "editions": ["kairo"],
+  "api": 1,
+  "kairo": ">=0.4.0",
+  "minecraft": "~26.3",
+  "group": "effects",
+  "tags": ["combat", "visuals"]
+}

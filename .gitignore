@@ -1,0 +1,14 @@
+# gradle
+.gradle/
+build/
+out/
+classes/
+run/
+
+# Kairo's jar, which addons are compiled against (download it from Mordsome/Kairo's releases)
+libs/*.jar
+
+# editors
+.idea/
+*.iml
+.vscode/

@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "${id}",
+	"version": "${version}",
+	"name": "${name}",
+	"description": "${description}",
+	"authors": [
+		"Mordsome"
+	],
+	"license": "GPL-3.0-only",
+	"icon": "assets/kairo-addon-plastic-menus/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"kairo:addon": [
+			"dev.mordo.kairo.addons.plastic.PlasticMenus"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "${minecraft}",
+		"kairo": "${kairo}"
+	},
+	"custom": {
+		"kairo:addon": {
+			"api": ${api},
+			"editions": ${editions},
+			"conflicts": ${conflicts}
+		}
+	}
+}

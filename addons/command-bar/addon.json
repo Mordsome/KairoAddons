@@ -1,0 +1,13 @@
+{
+  "id": "command-bar",
+  "name": "Command Bar",
+  "version": "1.0.0",
+  "summary": "Right Shift opens a search bar instead of the ring: type to find any page, mod or setting.",
+  "description": "Swaps the Right Shift ring for a command bar. Your ring sections sit under it as big numbered tiles; start typing and it finds pages, mods and their settings as you type (\"keys\" finds Keystrokes, \"cps\" finds CPS and every setting about it). Arrow keys and Enter, number keys, or the mouse; Tab switches a mod on or off right from the results. It follows your theme. Choose it in Visuals → Ring (Right Shift opens), and switch back to the ring there any time.",
+  "editions": ["kairo", "void"],
+  "api": 1,
+  "kairo": ">=0.4.0",
+  "minecraft": "~26.3",
+  "group": "tools",
+  "tags": ["menu", "search", "navigation"]
+}

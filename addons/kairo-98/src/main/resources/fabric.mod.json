@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "${id}",
+	"version": "${version}",
+	"name": "${name}",
+	"description": "${description}",
+	"authors": [
+		"Mordsome"
+	],
+	"license": "GPL-3.0-only",
+	"icon": "assets/kairo-addon-kairo-98/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"kairo:addon": [
+			"dev.mordo.kairo.addons.k98.Kairo98"
+		]
+	},
+	"mixins": [
+		"kairo98.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "${minecraft}",
+		"kairo": "${kairo}"
+	},
+	"custom": {
+		"kairo:addon": {
+			"api": ${api},
+			"editions": ${editions},
+			"conflicts": ${conflicts}
+		}
+	}
+}

@@ -1,0 +1,67 @@
+name: Build
+
+# Builds every addon on each push and pull request, against the newest Kairo release.
+# Pushing a tag addons-<number> (for example addons-1) also makes a DRAFT release with every addon's jar and icon,
+# addons.json and SHA256SUMS.txt (see SPEC.md). The launcher only reads a release once it is published by hand.
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'addons-*' ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Fetch Kairo's jar (addons are compiled against it)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p libs kairo-release
+          gh release download --repo Mordsome/Kairo --dir kairo-release --pattern 'kairo-[0-9]*.jar' --pattern 'SHA256SUMS.txt'
+          (cd kairo-release && sha256sum --check --ignore-missing SHA256SUMS.txt)
+          cp kairo-release/kairo-[0-9]*.jar libs/
+
+      - name: Build every addon and the catalogue
+        run: ./gradlew catalogue
+
+      - name: Show what the release would hold
+        run: cat build/release/addons.json build/release/SHA256SUMS.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kairo-addons
+          path: build/release/*
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/addons-')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: kairo-addons
+          path: dist
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: Kairo Addons ${{ github.ref_name }}
+          draft: true
+          generate_release_notes: true
+          files: dist/*

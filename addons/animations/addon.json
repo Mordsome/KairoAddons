@@ -1,0 +1,13 @@
+{
+  "id": "animations",
+  "name": "Animations",
+  "version": "1.0.0",
+  "summary": "Attack, mining and inspect animations, the swing trail and held item looks for Kairo.",
+  "description": "Brings plain Kairo's hand animations back: ten attack animations, seven mining animations, weapon inspect (V), the glowing swing trail, the shimmer and outline on what you hold, and the shimmer colour for enchanted items. Your old choices come back as they were. Kairo Void has all of this built in.",
+  "editions": ["kairo"],
+  "api": 1,
+  "kairo": ">=0.4.0",
+  "minecraft": "~26.3",
+  "group": "effects",
+  "tags": ["animations", "visuals"]
+}

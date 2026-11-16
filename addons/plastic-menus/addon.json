@@ -1,0 +1,13 @@
+{
+  "id": "plastic-menus",
+  "name": "Plastic Menus",
+  "version": "1.0.0",
+  "summary": "A solid, moulded-plastic look for every Kairo menu: no glass, soft 3D edges.",
+  "description": "Swaps Kairo's frosted glass (or Kairo Void's flat grey) for solid plastic: every panel, button and ring segment is a raised slab with a lit top edge, a darker side and a soft gloss. Pick the plastic's colour, how deep the slabs are and how glossy. Chosen in Visuals (Menu look), and switched back there any time.",
+  "editions": ["kairo", "void"],
+  "api": 1,
+  "kairo": ">=0.3.0",
+  "minecraft": "~26.3",
+  "group": "themes",
+  "tags": ["menus", "look"]
+}
